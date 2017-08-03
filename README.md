@@ -1,5 +1,4 @@
 # Model Predictive Control
----
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
 In this project we would implement a Model Predictive Controller to follow a desired trajectory around a test track in Udacity's simulator.
