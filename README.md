@@ -55,7 +55,7 @@ In this project we would implement a Model Predictive Controller to follow a des
 ## Implementation
 
 
-**The Model.**
+**The Model**
 
 * The Model Predictive Control is a nonlinear optimal controller that uses a kinematic model of the vehicle's motion in a Unity simulator. The state comprises of `x` and `y` coordinates of the vehicle, orientation of the vehicle - `psi`, velocity of the vehicle - `v`, cross track error between desired and actual trajectory - `cte` and heading error - `epsi`. The control inputs are the steering angle - `delta` and throttle - `a`. The kinematic model is shown in the graphic alongwith the constraints on control inputs. 
 
@@ -91,23 +91,23 @@ In this project we would implement a Model Predictive Controller to follow a des
 * The Ipopt solver gives optimal actuator inputs over the receding horizon of N timesteps. The controller executes the first step and resolves the same problem at the next iteration. This is done to ensure that controller is robust to scene changes on the road. The waypoints predicted by the controller are shown in green in the simulator while the actual waypoints are shown in yellow. 
 
 
-**Timestep Length and Elapsed Duration (N & dt).**
+**Timestep Length and Elapsed Duration (N & dt)**
 
 * `N` was chosen as `10` and `dt` was set to `0.05` seconds to give a total time horizon spanning over `0.5` seconds. `N` has a heavy toll on performance of the solver so it was not increased, a smaller value of `5` was tried but led to worse performance as there were too few waypoints to accurately set the associated costs. The duration `dt` was set as `0.1` initially but led to the car cutting some corners on turns as there were not enough predicted waypoints to negotiate turns smoothly, so a value of `0.05`seconds was chosen which better approximated the the desired trajectory at turns. 
 
 
 
-**Polynomial Fitting and MPC Preprocessing.**
+**Polynomial Fitting and MPC Preprocessing**
 
 * A cubic polynomial was fitted to the desired waypoints which were first transformed to the vehicle frame to make subsequent calculations easier - the `x`, `y` and `psi` states are always zero in this coordinate frame. The orienation errors were calculated by calculating the difference between the slopes of desired polynomial curve and current orienation. The cross track error was computed similarly. An adaptive reference velocity was set to incorporate braking at the turns since it's an expected human behavior to brake at a turn. This is achieved by penalizing cross track error and orientation error when calculating desired velocity.
 
 
-**Model Predictive Control with Latency.**
+**Model Predictive Control with Latency**
 
 * In real-world situations there is a certain lag between the time when the solver outputs a solution and the actuators actually execute it. This is approximated to be 100 ms in this model and is handled by calculating the position and velocity of the vehicle in the global coordinate frame after this delay. This information is then utilized to calculate the new coordinates of desired waypoints in the vehicle frame which has moved globally. The rest of the procedure is similar except that the desired velocity is decreased from 120 to 100 miles per hour and the cost function coefficients are changed in comparision to the no-delay case.
 
 
-**Videos.**
+**Videos**
 
-* [No Latency](https://youtu.be/uJQ-8ufyZcQ)
+* [No Latency](https://youtu.be/2PsfiCYOnGA)
 * [Latency](https://youtu.be/_6eAb73Vis8)
